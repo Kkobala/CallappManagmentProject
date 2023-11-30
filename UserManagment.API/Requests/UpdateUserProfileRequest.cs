@@ -1,6 +1,6 @@
-﻿namespace UserManagment.Common.Requests
+﻿namespace UserManagment.API.Requests
 {
-    public class CreateUserProfileRequest
+    public class UpdateUserProfileRequest
     {
         public int UserId { get; set; }
         public string FirstName { get; set; }

@@ -2,7 +2,6 @@
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 using UserManagment.Domain.Entites;
-using UserManagment.Domain.Mapping;
 
 namespace UserManagment.Infrastructure.Db
 {
@@ -17,10 +16,8 @@ namespace UserManagment.Infrastructure.Db
 
         protected override void OnModelCreating(ModelBuilder builder)
         {
-            builder.ApplyConfiguration(new UserMap());
-
             base.OnModelCreating(builder);
-            builder.Entity<UserEntity>().ToTable("Users");
+            builder.Entity<UserEntity>().ToTable("Users").HasKey(x => x.Id);
             builder.Entity<RoleEntity>().ToTable("Roles");
             builder.Entity<IdentityUserRole<int>>().ToTable("UserRoles");
             builder.Entity<IdentityRoleClaim<int>>().ToTable("RoleClaims");

@@ -2,11 +2,13 @@
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
-//using UserManagment.Domain.AuthRequests;
 using UserManagment.Domain.Entites;
-using UserManagment.Common.Auth;
+using UserManagment.API.Auth;
 using UserManagment.Infrastructure.Db;
-using UserManagment.Common.AuthRequests;
+using UserManagment.API.AuthRequests;
+using UserManagment.API.Services.Interfaces;
+using UserManagment.API.Requests;
+using UserManagment.Common.Validations.Interfaces;
 
 namespace UserManagment.API.Controllers
 {
@@ -17,20 +19,25 @@ namespace UserManagment.API.Controllers
         private readonly TokenGenerator _tokenGenerator;
         private readonly UserManager<UserEntity> _userManager;
         private readonly AppDbContext _db;
+        private readonly IProfileService _profileService;
+        private readonly IUserValidations _validations;
 
         public UserController(
             TokenGenerator tokenGenerator,
             UserManager<UserEntity> userManager,
-            AppDbContext db)
+            AppDbContext db,
+            IProfileService profileService,
+            IUserValidations validations)
         {
             _tokenGenerator = tokenGenerator;
             _userManager = userManager;
             _db = db;
-
+            _profileService = profileService;
+            _validations = validations;
         }
 
-        [HttpPost("admin-login")]
-        public async Task<IActionResult> LoginOperator([FromBody] LoginRequest request)
+        [HttpPost("login-admin")]
+        public async Task<IActionResult> LoginAdmin([FromBody] LoginRequest request)
         {
             var user = await _userManager.FindByEmailAsync(request.Email);
 
@@ -43,7 +50,7 @@ namespace UserManagment.API.Controllers
 
             if (!isCoorrectPassword)
             {
-                return BadRequest("Invalid Password or Email");
+                return BadRequest("Not Authorized");
             }
 
             var roles = await _userManager.GetRolesAsync(user);
@@ -52,8 +59,8 @@ namespace UserManagment.API.Controllers
         }
 
         [Authorize(Policy = "Admin", AuthenticationSchemes = "Bearer")]
-        [HttpPost("register")]
-        public async Task<IActionResult> Register(RegisterUserRequest request)
+        [HttpPost("register-user")]
+        public async Task<IActionResult> RegisterUser(RegisterUserRequest request)
         {
             if (!ModelState.IsValid)
             {
@@ -66,6 +73,8 @@ namespace UserManagment.API.Controllers
                 Email = request.Email,
                 IsActive = true,
             };
+
+            _validations.ValidateEmailAddress(request.Email);
 
             var result = await _userManager.CreateAsync(entity, request.Password!);
 
@@ -96,12 +105,46 @@ namespace UserManagment.API.Controllers
 
             if (!isCorrectPassword)
             {
-                return BadRequest("Invalid email or password");
+                return BadRequest("Not Authorized");
             }
 
             var roles = await _userManager.GetRolesAsync(user);
 
             return Ok(_tokenGenerator.Generate(user.Id.ToString(), roles));
+        }
+
+        [Authorize(Policy = "ApiUser", AuthenticationSchemes = "Bearer")]
+        [HttpPost("create-profile")]
+        public async Task<IActionResult> CreateUserProfile(CreateUserProfileRequest request)
+        {
+            var user = await _profileService.CreateUserProfile(request);
+            return Ok(user);
+        }
+
+        [Authorize(Policy = "ApiUser", AuthenticationSchemes = "Bearer")]
+        [HttpPut("update-profile")]
+        public async Task<IActionResult> UpdateUserProfile(UpdateUserProfileRequest request)
+        {
+            var update = await _profileService.UpdateUserProfile(request);
+            return Ok(update);
+        }
+
+        [Authorize(Policy = "ApiUser", AuthenticationSchemes = "Bearer")]
+        [HttpGet("view-profile")]
+        public async Task<IActionResult> ViewUserProfile(int userId)
+        {
+            var user = await _profileService.GetUserProfileByUserId(userId);
+            return Ok(user);
+        }
+
+
+        [Authorize(Policy = "ApiUser", AuthenticationSchemes = "Bearer")]
+        [HttpDelete("delete-user-profile")]
+        public async Task<IActionResult> DeleteUser(DeleteUserProfileRequest request)
+        {
+            await _profileService.RemoveUserProfile(request);
+
+            return Ok("Succesfully deleted user's profile");
         }
     }
 }

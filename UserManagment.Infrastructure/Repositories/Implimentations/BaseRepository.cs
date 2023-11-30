@@ -29,35 +29,26 @@ namespace UserManagment.Infrastructure.Repositories.Implimentations
             _db.Profiles.Remove(userProfile);
         }
 
-        public async Task<UserProfileEntity> FindUser(string firstName)
-        {
-            var userProfile = await _db.Profiles.FirstOrDefaultAsync(x => x.FirstName == firstName);
-
-            if (userProfile == null)
-            {
-                throw new ArgumentException("User profile couldn't be found");
-            }
-
-            return userProfile;
-        }
-
-        public async Task<UserEntity> GetUserByFirstName(string firstName)
-        {
-            var user = await _db.Users.Include(u => u.Profile)
-                          .FirstOrDefaultAsync(u => u.Profile.FirstName == firstName);
-
-            if (user == null)
-                throw new ArgumentException("User doesn't exist!");
-
-            return user;
-        }
-
         public async Task<UserProfileEntity> GetUserProfileByUserId(int id)
         {
             var user = await _db.Profiles.FirstOrDefaultAsync(u => u.UserId == id);
 
             if (user == null)
                 throw new ArgumentException("Cannot find user");
+
+            return user;
+        }
+        
+        public async Task<UserEntity> GetUserById(int id)
+        {
+            var user = await _db.Users
+                              .Include(u => u.Profile) 
+                              .FirstOrDefaultAsync(u => u.Id == id);
+
+            if (user == null)
+            {
+                throw new ArgumentException($"Cannot find user with ID {id}");
+            }
 
             return user;
         }

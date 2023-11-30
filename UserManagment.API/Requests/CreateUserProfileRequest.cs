@@ -1,7 +1,8 @@
-﻿namespace UserManagment.Common.Models
+﻿namespace UserManagment.API.Requests
 {
-    public class UserProfile
+    public class CreateUserProfileRequest
     {
+        public int UserId { get; set; }
         public string FirstName { get; set; }
         public string LastName { get; set; }
         public string PersonalNumber { get; set; }

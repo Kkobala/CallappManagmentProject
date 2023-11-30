@@ -1,7 +1,4 @@
 ﻿using UserManagment.Domain.Entites;
-//using UserManagment.Common.Models;
-//using UserManagment.Domain.Requests;
-
 namespace UserManagment.Infrastructure.Repositories.Interfaces
 {
     public interface IBaseRepository
@@ -9,8 +6,7 @@ namespace UserManagment.Infrastructure.Repositories.Interfaces
         Task Add(UserProfileEntity userProfile);
         void Update(UserProfileEntity userProfile);
         void Delete(UserProfileEntity userProfile);
-        Task<UserProfileEntity> FindUser(string firstName);
-        Task<UserEntity> GetUserByFirstName(string firstName);
+        Task<UserEntity> GetUserById(int id);
         Task<UserProfileEntity> GetUserProfileByUserId(int id);
         Task SaveChangesAsync();
     }

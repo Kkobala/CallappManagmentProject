@@ -1,13 +1,13 @@
-﻿using UserManagment.Common.Models;
-using UserManagment.Common.Requests;
+﻿using UserManagment.API.Models;
+using UserManagment.API.Requests;
 
-namespace UserManagment.Common.Services.Interfaces
+namespace UserManagment.API.Services.Interfaces
 {
     public interface IProfileService
     {
         Task<UserProfile> CreateUserProfile(CreateUserProfileRequest request);
         Task<UserProfile> UpdateUserProfile(UpdateUserProfileRequest request);
-        Task<User> GetUserProfileByFirstName(string firstName);
+        Task<UserProfile> GetUserProfileByUserId(int userId);
         Task RemoveUserProfile(DeleteUserProfileRequest request);
     }
 }

@@ -1,4 +1,4 @@
-﻿namespace UserManagment.Common.Auth
+﻿namespace UserManagment.API.Auth
 {
     public class JwtSettings
     {

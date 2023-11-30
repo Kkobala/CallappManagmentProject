@@ -1,6 +1,6 @@
-﻿namespace UserManagment.Common.AuthRequests
+﻿namespace UserManagment.API.AuthRequests
 {
-    public class LoginRequest
+    public class RegisterUserRequest
     {
         public string Email { get; set; }
         public string Password { get; set; }

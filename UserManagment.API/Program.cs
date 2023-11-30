@@ -2,9 +2,9 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.OpenApi.Models;
 using Serilog;
-using UserManagment.Common.Auth;
-using UserManagment.Common.Services.Implementations;
-using UserManagment.Common.Services.Interfaces;
+using UserManagment.API.Auth;
+using UserManagment.API.Services.Implementations;
+using UserManagment.API.Services.Interfaces;
 using UserManagment.Common.Validations.Implementations;
 using UserManagment.Common.Validations.Interfaces;
 using UserManagment.Infrastructure.Db;
@@ -36,7 +36,7 @@ builder.Services.AddScoped<IBaseRepository, BaseRepository>();
 builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
 builder.Services.AddScoped<IUserValidations, UserValidations>();
 builder.Services.AddScoped<IProfileService, ProfileService>();
-builder.Services.AddScoped<IJsonPlaceHolderService, JsonPlaceHolderService>();
+builder.Services.AddScoped<IExternalDataService, ExternalDataService>();
 
 // Add services to the container.
 

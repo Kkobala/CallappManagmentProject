@@ -1,16 +1,16 @@
 ﻿using Microsoft.Extensions.Hosting;
 using Newtonsoft.Json;
-using UserManagment.Common.Models.JSONPlaceHolderModels;
-using UserManagment.Common.Services.Interfaces;
+using UserManagment.API.Models.ExternalDataModels;
+using UserManagment.API.Services.Interfaces;
 
-namespace UserManagment.Common.Services.Implementations
+namespace UserManagment.API.Services.Implementations
 {
-    public class JsonPlaceHolderService: IJsonPlaceHolderService
+    public class ExternalDataService: IExternalDataService
     {
         private readonly Uri uri;
         private readonly HttpClient httpClient;
 
-        public JsonPlaceHolderService()
+        public ExternalDataService()
         {
             uri = new Uri("https://jsonplaceholder.typicode.com/");
             httpClient = new HttpClient()

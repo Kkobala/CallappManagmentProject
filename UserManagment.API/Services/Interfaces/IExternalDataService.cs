@@ -1,8 +1,8 @@
-﻿using UserManagment.Common.Models.JSONPlaceHolderModels;
+﻿using UserManagment.API.Models.ExternalDataModels;
 
-namespace UserManagment.Common.Services.Interfaces
+namespace UserManagment.API.Services.Interfaces
 {
-    public interface IJsonPlaceHolderService
+    public interface IExternalDataService
     {
         Task<List<TodosModel>> GetUsersTodo(int userId);
         Task<List<AlbumsModel>> GetUsersAlbums(int userId);

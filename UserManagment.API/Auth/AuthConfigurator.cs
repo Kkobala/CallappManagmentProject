@@ -8,7 +8,7 @@ using System.Text;
 using UserManagment.Domain.Entites;
 using UserManagment.Infrastructure.Db;
 
-namespace UserManagment.Common.Auth
+namespace UserManagment.API.Auth
 {
     public static class AuthConfigurator
     {

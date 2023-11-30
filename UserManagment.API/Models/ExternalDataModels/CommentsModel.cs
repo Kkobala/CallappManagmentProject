@@ -1,4 +1,4 @@
-﻿namespace UserManagment.Common.Models.JSONPlaceHolderModels
+﻿namespace UserManagment.API.Models.ExternalDataModels
 {
     public class CommentsModel
     {

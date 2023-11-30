@@ -5,6 +5,14 @@ namespace UserManagment.Common.Validations.Implementations
 {
     public class UserValidations: IUserValidations
     {
+        public void ValidateEmailAddress(string emailAddress)
+        {
+            if (!Regex.IsMatch(emailAddress, @"^[^@\s]+@[^@\s]+\.[^@\s]+$"))
+            {
+                throw new Exception("Please enter a valid email address.");
+            }
+        }
+
         public void CheckPersonalNumberFormat(string personalNumber)
         {
             if (Regex.IsMatch(personalNumber, @"[A-Za-z]") || Regex.IsMatch(personalNumber, @"^(?=.*[\W_]).+$"))

@@ -1,16 +1,16 @@
-﻿using UserManagment.Common.Models;
-using UserManagment.Common.Requests;
-using UserManagment.Common.Services.Interfaces;
+﻿using UserManagment.API.Models;
+using UserManagment.API.Models.ExternalDataModels;
+using UserManagment.API.Requests;
+using UserManagment.API.Services.Interfaces;
 using UserManagment.Common.Validations.Interfaces;
 using UserManagment.Domain.Entites;
 using UserManagment.Infrastructure.UnitOfWork.Interfaces;
 
-namespace UserManagment.Common.Services.Implementations
+namespace UserManagment.API.Services.Implementations
 {
     public class ProfileService : IProfileService
     {
         private readonly IUnitOfWork _unitOfWork;
-        //private readonly IBaseRepository _baseRepository;
         private readonly IUserValidations _validations;
 
         public ProfileService(
@@ -48,7 +48,7 @@ namespace UserManagment.Common.Services.Implementations
 
         public async Task<UserProfile> UpdateUserProfile(UpdateUserProfileRequest request)
         {
-            var oldProfile = await _unitOfWork.BaseRepository.FindUser(request.OldFirstName);
+            var oldProfile = await _unitOfWork.BaseRepository.GetUserProfileByUserId(request.UserId);
 
             if (oldProfile == null)
             {
@@ -74,11 +74,11 @@ namespace UserManagment.Common.Services.Implementations
 
         public async Task RemoveUserProfile(DeleteUserProfileRequest request)
         {
-            var profile = await _unitOfWork.BaseRepository.GetUserByFirstName(request.FirstName);
+            var profile = await _unitOfWork.BaseRepository.GetUserById(request.UserId);
 
             if (profile == null)
             {
-                throw new ArgumentException($"User with {request.FirstName} cannot be found.");
+                throw new ArgumentException($"User with {request.UserId} cannot be found.");
             }
 
             profile.IsActive = false;
@@ -92,18 +92,20 @@ namespace UserManagment.Common.Services.Implementations
             await _unitOfWork.BaseRepository.SaveChangesAsync();
         }
 
-        public async Task<User> GetUserProfileByFirstName(string firstName)
+        public async Task<UserProfile> GetUserProfileByUserId(int userId)
         {
-            var user = await _unitOfWork.BaseRepository.GetUserByFirstName(firstName);
+            var user = await _unitOfWork.BaseRepository.GetUserProfileByUserId(userId);
 
             if (user == null)
             {
-                throw new ArgumentException($"User with {firstName} cannot be found");
+                throw new ArgumentException($"User with {userId} cannot be found");
             }
 
-            var userProfile = new User
+            var userProfile = new UserProfile
             {
-                UserName = user.UserName!,
+               FirstName = user.FirstName,
+               LastName = user.LastName,
+               PersonalNumber = user.PersonalNumber,
             };
 
             return userProfile;

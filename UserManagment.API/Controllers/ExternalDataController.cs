@@ -1,16 +1,16 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using UserManagment.Common.Services.Interfaces;
+using UserManagment.API.Services.Interfaces;
 
 namespace UserManagment.API.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class JsonPlaceHolderController : ControllerBase
+    public class ExternalDataController : ControllerBase
     {
-        private readonly IJsonPlaceHolderService _service;
+        private readonly IExternalDataService _service;
 
-        public JsonPlaceHolderController(IJsonPlaceHolderService service)
+        public ExternalDataController(IExternalDataService service)
         {
             _service = service;   
         }
